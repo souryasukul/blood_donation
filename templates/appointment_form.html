@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make an Appointment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+</head>
+<body>
+    <header class="bg-danger text-white text-center py-3">
+        <h1>Donate It</h1>
+        <p class="lead">Saving Lives, One Pint at a Time</p>
+    </header>
+    <main class="container mt-5">
+        <!-- Appointment Form -->
+        <section>
+            <h2 class="mb-4">Make an Appointment</h2>
+            <form method="POST" action="/appointment">
+                <div class="mb-3">
+                    <label for="hospital" class="form-label">Choose a nearby hospital:</label>
+                    <select id="hospital" name="hospital" class="form-select" required>
+                        {% for hospital in hospitals %}
+                            <option value="{{ hospital['name'] }}">{{ hospital['name'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="date" class="form-label">Choose a date:</label>
+                    <input type="date" id="date" name="date" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="time" class="form-label">Choose a time:</label>
+                    <input type="time" id="time" name="time" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Submit Appointment</button>
+            </form>
+        </section>
+
+        <!-- Nearby Hospitals Map -->
+        <section class="mt-5">
+            <h3>Nearby Hospitals</h3>
+            <div id="map" style="height: 400px; margin-top: 20px;"></div>
+        </section>
+
+        <a href="/customer" class="btn btn-secondary mt-4">Back to Customer Home</a>
+    </main>
+    <footer class="bg-dark text-white text-center py-2 mt-5">
+        <p>&copy; 2024 Donate It. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Load hospitals passed from the backend
+        const hospitals = {{ hospitals | tojson }};
+        const map = L.map('map').setView([33.7701, -118.1937], 13); // Default: Long Beach
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // Add markers for each hospital
+        hospitals.forEach(hospital => {
+            const { name, latitude, longitude } = hospital;
+            L.marker([latitude, longitude]).addTo(map).bindPopup(`<b>${name}</b>`);
+        });
+    </script>
+</body>
+</html>
+

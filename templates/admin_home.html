@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-danger text-white text-center py-3">
+        <h1>Donate It</h1>
+        <p class="lead">Saving Lives, One Pint at a Time</p>
+    </header>
+    <main class="container mt-5">
+        <!-- Pending Appointments -->
+        <section>
+            <h2 class="mb-4">Pending Appointments</h2>
+            {% if appointments %}
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-danger">
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Hospital</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                                <tr>
+                                    <td>{{ appointment[0] }}</td>
+                                    <td>{{ appointment[1] }}</td>
+                                    <td>{{ appointment[2] }}</td>
+                                    <td>{{ appointment[3] }}</td>
+                                    <td>{{ appointment[4] }}</td>
+                                    <td>{{ appointment[5] }}</td>
+                                    <td>
+                                        <form method="POST" action="/accept_appointment/{{ appointment[0] }}">
+                                            <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No pending appointments.</p>
+            {% endif %}
+        </section>
+
+        <!-- Confirmed Appointments -->
+        <section class="mt-5">
+            <h2 class="mb-4">Confirmed Appointments</h2>
+            {% if confirmed_appointments %}
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-success">
+                            <tr>
+                                <th>ID</th>
+                                <th>Customer</th>
+                                <th>Hospital</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in confirmed_appointments %}
+                                <tr>
+                                    <td>{{ appointment[0] }}</td>
+                                    <td>{{ appointment[1] }}</td>
+                                    <td>{{ appointment[2] }}</td>
+                                    <td>{{ appointment[3] }}</td>
+                                    <td>{{ appointment[4] }}</td>
+                                    <td>{{ appointment[5] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No confirmed appointments.</p>
+            {% endif %}
+        </section>
+
+        <!-- Blood Inventory -->
+        <section class="mt-5">
+            <h2 class="mb-4">Manage Blood Inventory</h2>
+            <form method="POST" action="/add_inventory" class="mb-4">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <input type="text" id="blood_type" name="blood_type" class="form-control" placeholder="Blood Type (e.g., A+)" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" id="quantity" name="quantity" class="form-control" placeholder="Quantity" required>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Add/Update</button>
+                    </div>
+                </div>
+            </form>
+            {% if inventory %}
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-warning">
+                            <tr>
+                                <th>Blood Type</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in inventory %}
+                                <tr>
+                                    <td>{{ item[1] }}</td>
+                                    <td>{{ item[2] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">No inventory available.</p>
+            {% endif %}
+        </section>
+
+        <a href="/logout" class="btn btn-danger mt-4">Logout</a>
+    </main>
+    <footer class="bg-dark text-white text-center py-2 mt-5">
+        <p>&copy; 2024 Donate It. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="bg-danger text-white text-center py-3">
+        <h1>Donate It</h1>
+        <p class="lead">Saving Lives, One Pint at a Time</p>
+    </header>
+    <main class="container mt-5">
+        <!-- Appointment List -->
+        <section>
+            <h2 class="mb-4">Your Appointments</h2>
+            {% if appointments %}
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Appointment ID</th>
+                                <th>Hospital</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appointment in appointments %}
+                                <tr>
+                                    <td>{{ appointment[0] }}</td>
+                                    <td>{{ appointment[2] }}</td>
+                                    <td>{{ appointment[3] }}</td>
+                                    <td>{{ appointment[4] }}</td>
+                                    <td>
+                                        {% if appointment[5] == "Pending" %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% elif appointment[5] == "Confirmed" %}
+                                            <span class="badge bg-success">Confirmed</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ appointment[5] }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">You have no appointments.</p>
+            {% endif %}
+        </section>
+
+        <!-- FDIC Blood Donation Rules -->
+        <section class="mt-5">
+            <h2 class="mb-4">FDIC Blood Donation Rules</h2>
+            <ul class="list-group">
+                <li class="list-group-item">You must be in good general health and feeling well.</li>
+                <li class="list-group-item">You must be at least 16 years old (with parental consent in some states).</li>
+                <li class="list-group-item">You must weigh at least 110 pounds.</li>
+                <li class="list-group-item">You must not have donated blood in the last 56 days.</li>
+                <li class="list-group-item">Bring a valid photo ID and stay hydrated before donating.</li>
+            </ul>
+        </section>
+
+        <!-- Add Appointment Button -->
+        <div class="mt-4">
+            <a href="/appointment" class="btn btn-primary">Make an Appointment</a>
+            <a href="/logout" class="btn btn-danger">Logout</a>
+        </div>
+    </main>
+    <footer class="bg-dark text-white text-center py-2 mt-5">
+        <p>&copy; 2024 Donate It. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
